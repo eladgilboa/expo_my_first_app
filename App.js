@@ -4,7 +4,6 @@ import 'react-native-vector-icons';
 import createReduxStore from './store/createReduxStore'
 import { View, Dimensions, StyleSheet,AsyncStorage } from 'react-native';
 import {TabNavigator, StackNavigator} from 'react-navigation';
-import { Constants } from 'expo';
 import FormPlayer from './container/FormPlayer.js';
 import FormMatch from './container/FormMatch';
 import MatchView from './container/MatchView'
@@ -13,18 +12,28 @@ import PlayerView from './container/PlayerView';
 import { persistStore } from 'redux-persist'
 import styleVariables from './styleVariables';
 import { Font } from 'expo';
-import BackgroundImage from './components/BackgroundImage'
 
 var initialState ={
     playersList:[],
-    games:[
+    matches:[
         {
             date : new Date('16/9/2007').getTime(),
             teamA: [1,2,3],
             teamB: [4,5,6],
             scorers : [4,1,3,6]
         }
-    ]
+    ],
+    tempMatch: {
+        date : Date.now(),
+        teamA: {
+            players:[],
+            goals:[]
+        },
+        teamB: {
+            players:[],
+            goals:[]
+        },
+    }
 };
 
 AsyncStorage.getItem('KoHotStore', (err, result) => {
@@ -102,10 +111,9 @@ const MainScreenNavigator = TabNavigator({
     tabBarOptions: {
         style: {
             backgroundColor : styleVariables.darkblue,
-            zIndex : 0
         },
         indicatorStyle: {
-            backgroundColor: styleVariables.primeBlue
+            backgroundColor: styleVariables.primeBlue,
         },
         activeTintColor : styleVariables.primeBlue,
         inactiveTintColor : styleVariables.primeYellow,
@@ -136,7 +144,7 @@ export default class App extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingTop: Constants.statusBarHeight,
+        //paddingTop: Constants.statusBarHeight,
         backgroundColor: styleVariables.darkblue,
         borderColor: styleVariables.lineColor
     }

@@ -28,10 +28,23 @@ export const deletePlayer = (player) => {
   }
 };
 
-export const startMatch = (matchObject) => {
-    matchObject.date = new Date().getTime();
+export const addMatch = (matchObject) => {
     return {
-        type: 'MATCH_START',
+        type: 'ADD_MATCH',
         matchObject
     }
 };
+
+// TEMP MATCH
+export const setTempMatch = (matchObject) => {
+    return {
+        type: 'SET_TEMP_MATCH',
+        matchObject
+    }
+}
+
+export const clearTempMatch = () => (
+    {
+        type: 'CLEAR_TEMP_MATCH'
+    }
+)

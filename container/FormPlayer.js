@@ -3,11 +3,14 @@
  */
 import React from 'react';
 //import { ActionsContainer, Button, FieldsContainer, Fieldset, Form, FormGroup, Input, Label } from 'react-native-clean-form';
-import { StyleSheet, Text, View, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, Dimensions, ScrollView } from 'react-native';
 import { Icon, Button, FormLabel, FormInput, Divider, Card, FormValidationMessage, Avatar } from 'react-native-elements';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
+import styleVariables from '../styleVariables';
 import playersAvatar from '../utils/playersAvatar';
+import TypeButton from '../components/TypeButton';
+import BackgroundImage from '../components/BackgroundImage';
 
 const validationMessageConfig = {
     name : 'player name already exist'
@@ -87,38 +90,55 @@ class FormPlayer extends React.Component {
         const defaultImg = require('../images/defaultPlayerAvatar.png');
 
         return (
-            <View>
-                <Card
-                  title="Creat New Player"
-                  image={ player.avatar || defaultImg }
-                  imageProps={{resizeMode:'contain'}}
-                >
-                    <Button
-                      onPress={this.setRendomAvatar.bind(this)}
-                      buttonStyle={{backgroundColor:'blue'}}
-                      title="Change Avatar"
-                      small
-                    />
+            <View style={{flex:1}}>
+                <BackgroundImage/>
+                <ScrollView>
+                    <Card
+                      title="Creat New Player"
+                      titleStyle={{color:styleVariables.primeYellow,fontFamily:styleVariables.font_thin}}
+                      image={ player.avatar || defaultImg }
+                      imageProps={{resizeMode:'contain'}}
+                      containerStyle={style.cardContainer}
+                      dividerStyle={{backgroundColor:'transparent'}}
+                    >
+                        <TypeButton
+                          onPress={this.setRendomAvatar.bind(this)}
+                          title="Change Avatar"
+                          small
+                        />
 
-                    <FormLabel labelStyle={{color : '#45A29E'}}>Name</FormLabel>
-                    <FormInput value={player.name} onChangeText={this.onChange.bind(this,'name')} />
-                    <FormValidationMessage>{validationMessage.name}</FormValidationMessage>
+                        <FormLabel labelStyle={{color : styleVariables.primeBlue}}>Name</FormLabel>
+                        <FormInput
+                          underlineColorAndroid={styleVariables.primeBlue}
+                          inputStyle={{color:styleVariables.primeBlue,borderColor:styleVariables.primeBlue}}
+                          value={player.name}
+                          onChangeText={this.onChange.bind(this,'name')}
+                        />
+                        <FormValidationMessage>{validationMessage.name}</FormValidationMessage>
 
-                </Card>
-                <Button
+                    </Card>
+                </ScrollView>
+                <TypeButton
                   onPress={this.save.bind(this)}
                   title="Creat New Player"
-
                   raised
-                  buttonStyle={{backgroundColor:'#45A29E'}}
                   large
                   disabled={ !Boolean( player.name && !Object.values(validationMessage).find( Boolean ) ) }
-                  iconRight={{name: 'done'}}
+                  iconRight={{name: 'done', color:styleVariables.primeBlue}}
                 />
             </View>
         );
     }
 }
+
+const style = StyleSheet.create({
+    cardContainer: {
+        backgroundColor: styleVariables.nivel2 + '99',
+        borderColor: styleVariables.lineColor,
+        borderRadius: 3,
+        //flex: 1
+    },
+})
 
 const mapStateToProps = (state, props) => {
     return {

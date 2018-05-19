@@ -2,7 +2,7 @@ const DEFAULT_STATE = {}
 
 export default (state = DEFAULT_STATE, {type, matchObject} = {}) => {
     switch (type) {
-        case 'MATCH_START':
+        case 'ADD_MATCH':
             return [ ...state, matchObject ];
         case 'TODO_ITEM_DELETED':
             return {...state, lastModified: Date.now()}

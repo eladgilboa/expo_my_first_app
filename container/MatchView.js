@@ -31,16 +31,9 @@ class MatchView extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            score : { teamA : 0, teamB : 0 },
             scoredTeam : false,
             choseScorer: false,
             choseAssist: false,
-        };
-        this.game = {
-            date : new Date().getTime(),
-            teamA: [],//will be saved on the end of the game
-            teamB: [],// ''
-            goals: [],// { scorer: 'messi' , assist : 'suares'}
         };
         this.goal = {
             scorer : null,
@@ -49,12 +42,19 @@ class MatchView extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-
+        //console.log('view',nextProps.tempMatch)
+    }
+    
+    saveGame(){
+        //const match = {...this.match,...this.props.teams};
+        //this.props.addMatch(match);
+        //navigation.navigate('PlayerView',{
+        //    player:playersList.find( player => player.id === id )
+        //})
     }
 
     onGoalScored(team){
         this.setState({ scoredTeam : team, choseScorer : true })
-
     }
 
     onScorerSelected(playerId){
@@ -68,11 +68,12 @@ class MatchView extends React.Component {
     }
 
     saveGoal(){
-        const score = Object.assign({},this.state.score);
-        const goal = Object.assign({},this.goal);
-        score[this.state.scoredTeam]++;
-        this.setState({ score });
-        this.game.goals.push(goal)
+        const { setTempMatch, tempMatch } = this.props;
+        const goal = {...this.goal};
+        const newTempMatch = {...tempMatch };
+
+        newTempMatch[this.state.scoredTeam].goals.push(goal);
+        setTempMatch(newTempMatch);
         this.clearGoal();
     }
 
@@ -86,8 +87,7 @@ class MatchView extends React.Component {
     }
 
     render() {
-
-        const { playersList, teams} = this.props;
+        const { playersList, tempMatch } = this.props;
         const { scoredTeam, choseAssist, choseScorer } = this.state;
 
         return (
@@ -99,7 +99,7 @@ class MatchView extends React.Component {
                         <View style={{alignItems:'center',paddingTop:8}}>
                             <Text style={{color:styleVariables.primeBlue,fontSize:22}}>Who Scored?</Text>
                         </View>
-                        <PlayerList playersList={teams[scoredTeam]} onPress={this.onScorerSelected.bind(this)}/>
+                        <PlayerList playersList={tempMatch[scoredTeam].players} onPress={this.onScorerSelected.bind(this)}/>
                     </View>
                 }
                 {
@@ -108,7 +108,7 @@ class MatchView extends React.Component {
                         <View style={{alignItems:'center',paddingTop:8}}>
                             <Text style={{color:styleVariables.primeBlue,fontSize:22}}>Who Assisted?</Text>
                         </View>
-                        <PlayerList playersList={teams[scoredTeam]} onPress={this.onAssistSelected.bind(this)}/>
+                        <PlayerList playersList={tempMatch[scoredTeam].players} onPress={this.onAssistSelected.bind(this)}/>
                     </View>
                 }
                 {
@@ -135,9 +135,9 @@ class MatchView extends React.Component {
                 }
                 {
                     !scoredTeam &&
-                    <GoalsBreakdown goals={this.game.goals} teams={teams} playersList={playersList}/>
+                    <GoalsBreakdown teamAGoals={tempMatch.teamA.goals} teamBGoals={tempMatch.teamB.goals} playersList={playersList}/>
                 }
-                <ScoreBord score={this.state.score} onGoalScored={this.onGoalScored.bind(this)}/>
+                <ScoreBord score={{ teamA : tempMatch.teamA.goals.length, teamB : tempMatch.teamB.goals.length }} onGoalScored={this.onGoalScored.bind(this)}/>
             </View>
         );
     }
@@ -150,10 +150,7 @@ const style = {
         flex:1,
         backgroundColor: styleVariables.nivel1,
         opacity:0.8,
-        //borderColor: styleVariables.lineColor,
-        //borderWidth : 1,
         borderRadius:3,
-        //top:-81,
         margin:0,
     },
     buttonCancel:{
@@ -172,13 +169,10 @@ const style = {
 const mapStateToProps = (state, props) => {
     return {
         playersList: state.playersList,
-        games: state.games,
-        teams: props.navigation.state.params.teams
+        tempMatch: state.tempMatch,
     }
-}
-
-const mapDispatchToProps = {
-    ...actions
 };
 
-export default connect(mapStateToProps)(MatchView)
+const mapDispatchToProps = {...actions};
+
+export default connect(mapStateToProps,mapDispatchToProps)(MatchView)

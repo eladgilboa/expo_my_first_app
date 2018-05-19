@@ -1,10 +1,10 @@
 import {combineReducers} from 'redux'
 import playersList from './playersList'
-import games from './games'
+import matches from './matches'
+import tempMatch from './tempMatch'
 
 export default combineReducers({
     playersList,
-    games
+    matches,
+    tempMatch
 })
-
-// export const getTodoItems = ({todoItems}) => todoItems

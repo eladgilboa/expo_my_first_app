@@ -6,11 +6,7 @@ import {StyleSheet, View} from 'react-native';
 import {Icon, Avatar, FormLabel, Text, Card, Divider, Badge, Button} from 'react-native-elements';
 import styleVariables from '../styleVariables';
 
-const GoalsBreakdown = ({goals, teams, playersList}) => {
-
-  const { teamA, teamB } = teams;
-  let teamAGoals = goals.filter( ({scorer}) => teamA.find(p => p.id === scorer) );
-  let teamBGoals = goals.filter( ({scorer}) => teamB.find(p => p.id === scorer) );
+const GoalsBreakdown = ({teamAGoals, teamBGoals, playersList}) => {
 
   const Goal = ({scorer,style}) => (
     <View style={style}>
@@ -25,7 +21,7 @@ const GoalsBreakdown = ({goals, teams, playersList}) => {
         { playersList.find( p => p.id === scorer ).name.toUpperCase() }
       </Text>
     </View>
-  )
+  );
 
   return (
     <View style={style.container}>
@@ -38,7 +34,7 @@ const GoalsBreakdown = ({goals, teams, playersList}) => {
       </View>
     </View>
   )
-}
+};
 
 const style = {
   container:{
@@ -55,9 +51,6 @@ const style = {
     flex:1,
     flexDirection: 'column',
     justifyContent:'flex-end',
-    //paddingHorizontal:1,
-    //alignItems: 'center',
-    //height: 100,
   },
   goalLeftTeam:{
     flexDirection: 'row-reverse',
