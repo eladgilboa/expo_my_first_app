@@ -37,10 +37,14 @@ class FormMatch extends React.Component {
     getFreePlayers(props=this.props){
         const { playersList, tempMatch } = props;
         return playersList.filter( player => (
-            !tempMatch.teamA.players.find( teamPlayer => teamPlayer.id === player.id  )
+            !tempMatch.teamA.players.find( teamPlayerId => teamPlayerId === player.id  )
             &&
-            !tempMatch.teamB.players.find( teamPlayer => teamPlayer.id === player.id  )
-        ))
+            !tempMatch.teamB.players.find( teamPlayerId => teamPlayerId === player.id  )
+        )).map( player => player.id )
+    }
+
+    getPlayer(id){
+        return this.props.playersList.find( player => player.id === id  )
     }
 
     componentWillReceiveProps(nextProps) {
@@ -81,9 +85,10 @@ class FormMatch extends React.Component {
     };
 
     renderTeam(team) {
-        return this.state[team].map((player, index) => {
+        return this.state[team].map((playerId, index) => {
+            const player = this.getPlayer(playerId)
             return (
-                <View key={player.id} style={{flex:-1,flexDirection:'row',alignItems:'center',margin:1}}>
+                <View key={playerId} style={{flex:-1,flexDirection:'row',alignItems:'center',margin:1}}>
                     <Avatar
                         small
                         rounded
@@ -128,8 +133,8 @@ class FormMatch extends React.Component {
                         >
                             <Picker.Item label="Add A Player" value={false}/>
                             {
-                                this.state.freePlayers.map((player) => (
-                                    <Picker.Item key={player.id} label={player.name} value={player.id}/>
+                                this.state.freePlayers.map((playerId) => (
+                                    <Picker.Item key={playerId} label={this.getPlayer(playerId).name} value={playerId}/>
                                 ))
                             }
                         </Picker>
@@ -148,9 +153,11 @@ class FormMatch extends React.Component {
                     <View style={style.pickerContainer}>
                         <Picker onValueChange={ this.insertIntoTeam.bind(this,'teamB') }>
                             <Picker.Item label="Add A Player " value={false}/>
-                            { this.state.freePlayers.map((player) => {
-                                return <Picker.Item key={player.id} label={player.name} value={player.id}/>
-                            }) }
+                            {
+                                this.state.freePlayers.map((playerId) => (
+                                  <Picker.Item key={playerId} label={this.getPlayer(playerId).name} value={playerId}/>
+                                ))
+                            }
                         </Picker>
                     </View>
                     <View

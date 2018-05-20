@@ -5,20 +5,23 @@ import React from 'react';
 import {connect} from 'react-redux';
 import * as actions from '../actions';
 import {StyleSheet, View, Picker, ScrollView} from 'react-native';
-import {Icon, Avatar, FormLabel, Text, Card, Divider, Badge, Button, registerCustomIconType} from 'react-native-elements';
+import {Icon, Avatar, ButtonGroup, Text, Card, Divider, Badge, Button, registerCustomIconType} from 'react-native-elements';
 import styleVariables from '../styleVariables';
 import ScoreBord from '../components/ScoreBord';
 import PlayerList from '../components/PlayersList';
 import BackgroundImage from '../components/BackgroundImage';
 import GoalsBreakdown from '../components/GoalsBreakdown';
+import TypeButton from '../components/TypeButton'
 
 import { createIconSetFromFontello } from 'react-native-vector-icons';
 import fontelloConfig from '../fonts/custom/config.json';
 registerCustomIconType('custom', createIconSetFromFontello(fontelloConfig));
 
+
+
 class MatchView extends React.Component {
     static navigationOptions = {
-        title: 'Match View',
+        title: 'Live Match',
         tabBarIcon: ({focused, tintColor}) => {
             return ( <Icon
                 type="material-community"
@@ -94,12 +97,19 @@ class MatchView extends React.Component {
             <View style={{flex:1,padding:10, justifyContent:'flex-end'}}>
                 <BackgroundImage/>
                 {
+                    !scoredTeam &&
+                    <View style={{flexDirection:'row',flex:1}}>
+                        <TypeButton type="error"   title='Cancel Match' containerViewStyle={{flex:1,margin:0}}/>
+                        <TypeButton type="success" title='End Match'    containerViewStyle={{flex:1,margin:0}}/>
+                    </View>
+                }
+                {
                     scoredTeam && choseScorer &&
                     <View style={style.playersContainer}>
                         <View style={{alignItems:'center',paddingTop:8}}>
                             <Text style={{color:styleVariables.primeBlue,fontSize:22}}>Who Scored?</Text>
                         </View>
-                        <PlayerList playersList={tempMatch[scoredTeam].players} onPress={this.onScorerSelected.bind(this)}/>
+                        <PlayerList playersList={this.props[scoredTeam].players} onPress={this.onScorerSelected.bind(this)}/>
                     </View>
                 }
                 {
@@ -108,7 +118,7 @@ class MatchView extends React.Component {
                         <View style={{alignItems:'center',paddingTop:8}}>
                             <Text style={{color:styleVariables.primeBlue,fontSize:22}}>Who Assisted?</Text>
                         </View>
-                        <PlayerList playersList={tempMatch[scoredTeam].players} onPress={this.onAssistSelected.bind(this)}/>
+                        <PlayerList playersList={this.props[scoredTeam].players} onPress={this.onAssistSelected.bind(this)}/>
                     </View>
                 }
                 {
@@ -166,10 +176,25 @@ const style = {
     }
 }
 
+const getPlayersFromCollection = (collection, playersId) => (
+    collection.filter( ({id}) => (
+      playersId.indexOf(id) > -1
+    ))
+);
+
 const mapStateToProps = (state, props) => {
+    const { playersList, tempMatch } = state;
     return {
-        playersList: state.playersList,
-        tempMatch: state.tempMatch,
+        playersList,
+        tempMatch,
+        teamA:{
+            players : getPlayersFromCollection(playersList,tempMatch.teamA.players),
+            goals : tempMatch.teamA.goals
+        },
+        teamB:{
+            players : getPlayersFromCollection(playersList,tempMatch.teamB.players),
+            goals : tempMatch.teamB.goals
+        }
     }
 };
 
