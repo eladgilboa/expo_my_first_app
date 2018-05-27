@@ -7,16 +7,27 @@ import * as actions from '../actions';
 import {StyleSheet, View, Picker, ScrollView} from 'react-native';
 import {Icon, Avatar, FormLabel, Text, Card, Divider, Badge, Button} from 'react-native-elements';
 import TypeButton from '../components/TypeButton'
-import styleVariables from '../styleVariables';
+import styleVariables from '../style/styleVariables';
 import BackgroundImage from '../components/BackgroundImage'
+import { NavigationActions } from 'react-navigation';
+
+const navigateToFormPlayer = NavigationActions.navigate({
+    routeName: 'PlayersList',
+
+    params: {},
+
+    action: NavigationActions.navigate({ routeName: 'form' }),
+});
+
+
 
 class FormMatch extends React.Component {
     static navigationOptions = {
-        title: 'Form Match',
+        title: 'Build Teams',
         tabBarIcon: ({focused, tintColor}) => {
             return ( <Icon
-                type="ionicon"
-                name='ios-football'
+                type="custom"
+                name='004-game-2'
                 color={tintColor}
             /> )
         }
@@ -25,6 +36,7 @@ class FormMatch extends React.Component {
     constructor(props) {
         super(props);
         const {teamA,teamB} = props.tempMatch;
+        console.log('construct',props.tempMatch)
 
         this.state = {
             freePlayers: this.getFreePlayers(props),
@@ -48,7 +60,7 @@ class FormMatch extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        //console.log('form',nextProps.tempMatch)
+        console.log('new',nextProps.tempMatch);
         this.setState({
             freePlayers: this.getFreePlayers(nextProps),
             teamA:nextProps.tempMatch.teamA.players,
@@ -172,6 +184,7 @@ class FormMatch extends React.Component {
     render() {
 
         const {navigation} = this.props;
+        const isDisabled = this.state.teamA.length === 0 || this.state.teamB.length === 0;
 
         if (this.props.playersList.length === 0) {
             return (
@@ -180,7 +193,7 @@ class FormMatch extends React.Component {
                   large
                   iconRight={{type:"ionicon",name:'ios-person-add',color:styleVariables.primeBlue}}
                   title='Creat Players'
-                  onPress={()=> navigation.navigate('FormPlayer')}
+                  onPress={()=> navigation.dispatch(navigateToFormPlayer)}
                 />
             );
         }
@@ -190,17 +203,15 @@ class FormMatch extends React.Component {
                 <BackgroundImage/>
                 <ScrollView>
                     {this.pickPlayers()}
-                </ScrollView>
-                <View>
                     <TypeButton
                       containerViewStyle={{ marginVertical:3}}
-                      large
-                      disabled={ this.state.teamA.length === 0 || this.state.teamB.length === 0 }
-                      iconRight={{name: 'done',color:styleVariables.primeBlue}}
+                      //large
+                      disabled={ isDisabled }
+                      iconRight={ isDisabled ? {name: 'done',color:styleVariables.lineColor} : {name: 'done',color:styleVariables.primeBlue} }
                       title='Start Match'
                       onPress={this.onStartMatch.bind(this)}
                     />
-                </View>
+                </ScrollView>
             </View>
         );
     }

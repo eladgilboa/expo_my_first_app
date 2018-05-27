@@ -5,7 +5,7 @@ import React from 'react';
 import {connect} from 'react-redux'
 import {StyleSheet, View, Image, Dimensions} from 'react-native';
 import {List, ListItem, Icon, Avatar} from 'react-native-elements';
-import styleVariables from '../styleVariables';
+import styleVariables from '../style/styleVariables';
 import backroungImage from '../images/background.jpg'
 import { Constants } from 'expo';
 

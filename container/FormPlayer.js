@@ -2,12 +2,11 @@
  * Created by elad.gilboa on 03/09/2017.
  */
 import React from 'react';
-//import { ActionsContainer, Button, FieldsContainer, Fieldset, Form, FormGroup, Input, Label } from 'react-native-clean-form';
 import { StyleSheet, Text, View, Dimensions, ScrollView } from 'react-native';
 import { Icon, Button, FormLabel, FormInput, Divider, Card, FormValidationMessage, Avatar } from 'react-native-elements';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
-import styleVariables from '../styleVariables';
+import styleVariables from '../style/styleVariables';
 import playersAvatar from '../utils/playersAvatar';
 import TypeButton from '../components/TypeButton';
 import BackgroundImage from '../components/BackgroundImage';
@@ -20,7 +19,7 @@ const validationMessageConfig = {
 
 class FormPlayer extends React.Component {
     static navigationOptions = {
-        title: 'Form Player',
+        title: 'New Player',
         tabBarIcon: ( { focused, tintColor } ) => {
             return( <Icon
                 type="ionicon"
@@ -43,7 +42,6 @@ class FormPlayer extends React.Component {
                 name : null
             }
         };
-        //this.setRendomAvatar();
     }
 
     onChange(label,value){
@@ -72,7 +70,7 @@ class FormPlayer extends React.Component {
         this.setState({saved : true});
         const { createPlayer, navigation } = this.props;
         createPlayer({ ...this.state.player });
-        navigation.navigate('PlayersList');
+        navigation.navigate('list');
         this.setState({saved : false, player:{} });
     }
 
@@ -88,14 +86,15 @@ class FormPlayer extends React.Component {
         const { } = this.props;
         const { validationMessage, player } = this.state;
         const defaultImg = require('../images/defaultPlayerAvatar.png');
+        const idDisabled = !Boolean( player.name && !Object.values(validationMessage).find( Boolean ) );
 
         return (
             <View style={{flex:1}}>
                 <BackgroundImage/>
                 <ScrollView>
                     <Card
-                      title="Creat New Player"
-                      titleStyle={{color:styleVariables.primeYellow,fontFamily:styleVariables.font_thin}}
+                      //title="Creat New Player"
+                      //titleStyle={{color:styleVariables.primeYellow,fontFamily:styleVariables.font_thin}}
                       image={ player.avatar || defaultImg }
                       imageProps={{resizeMode:'contain'}}
                       containerStyle={style.cardContainer}
@@ -104,7 +103,6 @@ class FormPlayer extends React.Component {
                         <TypeButton
                           onPress={this.setRendomAvatar.bind(this)}
                           title="Change Avatar"
-                          small
                         />
 
                         <FormLabel labelStyle={{color : styleVariables.primeBlue}}>Name</FormLabel>
@@ -120,11 +118,9 @@ class FormPlayer extends React.Component {
                 </ScrollView>
                 <TypeButton
                   onPress={this.save.bind(this)}
-                  title="Creat New Player"
-                  raised
-                  large
-                  disabled={ !Boolean( player.name && !Object.values(validationMessage).find( Boolean ) ) }
-                  iconRight={{name: 'done', color:styleVariables.primeBlue}}
+                  title="Create Player"
+                  disabled={ idDisabled }
+                  iconRight={ idDisabled ? {name: 'done', color:styleVariables.lineColor} : {name: 'done', color:styleVariables.primeBlue} }
                 />
             </View>
         );
@@ -136,6 +132,7 @@ const style = StyleSheet.create({
         backgroundColor: styleVariables.nivel2 + '99',
         borderColor: styleVariables.lineColor,
         borderRadius: 3,
+        paddingTop:8
         //flex: 1
     },
 })

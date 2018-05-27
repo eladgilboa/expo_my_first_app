@@ -39,7 +39,7 @@ function updatePlayer( state, player ) {
     });
 }
 
-export default ( state = {}, { type, player} = {} ) => {
+export default ( state = [], { type, player} = {} ) => {
     switch ( type ) {
         case 'PLAYER_CREATED':
             return createPlayer( state, player );

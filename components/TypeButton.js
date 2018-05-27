@@ -1,10 +1,12 @@
 import React from 'react';
 import {Button} from 'react-native-elements';
-import styleVariables from '../styleVariables';
+import styleVariables from '../style/styleVariables';
+import merge from 'deepmerge';
 
 export default TypeButton = ({ type, ...rest}) => {
 
-  const props = { ...types.default,  ...types[type], ...rest };
+  const props = merge.all([ types.default, types[type] || {}, rest ]);
+  //console.log(props);
   return (
     <Button {...props }/>
   )
@@ -14,6 +16,7 @@ const types = {
   default : {
     containerViewStyle:{
       backgroundColor:'transparent',
+      flex:1
     },
     buttonStyle: {
       backgroundColor: styleVariables.darkblue,
@@ -23,7 +26,12 @@ const types = {
     },
     color: styleVariables.primeBlue,
     disabledStyle:{
-      opacity:0.8
+      //opacity:0.9,
+      backgroundColor: styleVariables.darkblue + '55',
+      borderColor: styleVariables.lineColor,
+    },
+    disabledTextStyle:{
+      color:styleVariables.lineColor
     }
   },
   success : {

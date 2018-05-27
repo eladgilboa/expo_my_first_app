@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, View, TouchableHighlight, ScrollView} from 'react-native';
 import {Icon, Avatar, FormLabel, Text, Card, Divider, Badge, Button} from 'react-native-elements';
-import styleVariables from '../styleVariables';
+import styleVariables from '../style/styleVariables';
 
 const ScoreBord = ({score, onGoalScored}) => {
 
@@ -24,23 +24,26 @@ const ScoreBord = ({score, onGoalScored}) => {
       <TouchableHighlight onPress={ () => onGoalScored('teamA') }>
         <View style={[style.team, style.teamA]}>
           <Icon
-            type="entypo"
-            name='sports-club'
+            type="custom"
+            name='shield-BFC'
             color={styleVariables.primeYellow}
             size={40}
             iconStyle={{margin:5}}
           />
           <View>
             <Text style={{color:styleVariables.primeYellow}}>TEAM A</Text>
-            <View style={{ backgroundColor: 'white', height: 2}}></View>
-            <Icon
-              size={12}
-              name='goal'
-              type='custom'
-              color={styleVariables.primeYellow}
-              underlayColor={styleVariables.darkblue}
-              containerStyle={style.goalButton}
-            />
+            <View style={{ backgroundColor: styleVariables.primeBlue, height: 2}}></View>
+            {
+              onGoalScored &&
+              <Icon
+                  size={12}
+                  name='goal'
+                  type='custom'
+                  color={styleVariables.primeYellow}
+                  underlayColor={styleVariables.darkblue}
+                  containerStyle={style.goalButton}
+              />
+            }
           </View>
         </View>
       </TouchableHighlight>
@@ -51,21 +54,22 @@ const ScoreBord = ({score, onGoalScored}) => {
         <View style={[style.team, style.teamB]}>
           <View >
             <Text style={{color:styleVariables.primeYellow}}>TEAM B</Text>
-            <View style={{ backgroundColor: styleVariables.primeBlue, height: 2}}></View>
-            <Icon
-              //raised
-              revers
-              name='goal'
-              type='custom'
-              size={12}
-              color={styleVariables.primeYellow}
-              underlayColor={styleVariables.darkblue}
-              containerStyle={style.goalButton}
-            />
+            <View style={{ backgroundColor: styleVariables.white, height: 2}}></View>
+            {
+              onGoalScored &&
+              <Icon
+                size={12}
+                name='goal'
+                type='custom'
+                color={styleVariables.primeYellow}
+                underlayColor={styleVariables.darkblue}
+                containerStyle={style.goalButton}
+              />
+            }
           </View>
           <Icon
-            type="entypo"
-            name='sports-club'
+            type="custom"
+            name='shield-RMC'
             color={styleVariables.primeYellow}
             iconStyle={{margin:5}}
             size={40}

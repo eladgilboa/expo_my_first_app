@@ -6,7 +6,7 @@ import {connect} from 'react-redux'
 import {StyleSheet, Text, Image} from 'react-native';
 import {Card, Button, Icon, Avatar} from 'react-native-elements';
 import * as actions from '../actions';
-import styleVariables from '../styleVariables';
+import styleVariables from '../style/styleVariables';
 
 class PlayerView extends React.Component {
 

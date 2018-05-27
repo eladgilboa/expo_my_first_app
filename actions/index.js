@@ -28,6 +28,7 @@ export const deletePlayer = (player) => {
   }
 };
 
+// Matches
 export const addMatch = (matchObject) => {
     return {
         type: 'ADD_MATCH',
@@ -40,6 +41,13 @@ export const setTempMatch = (matchObject) => {
     return {
         type: 'SET_TEMP_MATCH',
         matchObject
+    }
+}
+
+export const setTempMatchDuration = (duration) => {
+    return {
+        type: 'SET_TEMP_MATCH_DURATION',
+        matchObject:{duration}
     }
 }
 

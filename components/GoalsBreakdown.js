@@ -4,7 +4,7 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import {Icon, Avatar, FormLabel, Text, Card, Divider, Badge, Button} from 'react-native-elements';
-import styleVariables from '../styleVariables';
+import styleVariables from '../style/styleVariables';
 
 const GoalsBreakdown = ({teamAGoals, teamBGoals, playersList}) => {
 
