@@ -85,9 +85,9 @@ const style = StyleSheet.create({
     flexDirection:'row',
     paddingVertical:3,
     justifyContent:'space-between',
-    backgroundColor:styleVariables.nivel2,
+    backgroundColor:styleVariables.nivel2+'aa',
     borderRadius:3,
-    opacity:0.8
+    //opacity:0.8
   },
   goalButton:{
     borderColor: styleVariables.lineColor,

@@ -16,7 +16,9 @@ const types = {
   default : {
     containerViewStyle:{
       backgroundColor:'transparent',
-      flex:1
+      flex:1,
+      margin:0,
+      padding:0
     },
     buttonStyle: {
       backgroundColor: styleVariables.darkblue,
@@ -24,14 +26,23 @@ const types = {
       borderColor: styleVariables.primeBlue,
       borderRadius: styleVariables.borderRadius,
     },
-    color: styleVariables.primeBlue,
+    textStyle :{
+      color: styleVariables.primeBlue,
+      fontFamily: styleVariables.font_light,
+      fontWeight:'100'
+    },
     disabledStyle:{
-      //opacity:0.9,
       backgroundColor: styleVariables.darkblue + '55',
       borderColor: styleVariables.lineColor,
     },
     disabledTextStyle:{
       color:styleVariables.lineColor
+    },
+    icon:{
+      color:styleVariables.primeBlue
+    },
+    iconRight:{
+      color:styleVariables.primeBlue
     }
   },
   success : {
@@ -41,7 +52,9 @@ const types = {
       borderColor: styleVariables.lightGreen,
       borderRadius: styleVariables.borderRadius,
     },
-    color: styleVariables.lightGreen,
+    textStyle :{
+      color: styleVariables.lightGreen,
+    },
     icon:{
       name: 'done',
       color:styleVariables.lightGreen
@@ -54,7 +67,9 @@ const types = {
       borderColor: styleVariables.primeRed,
       borderRadius: styleVariables.borderRadius,
     },
-    color: styleVariables.primeRed,
+    textStyle :{
+      color: styleVariables.primeRed,
+    },
     icon:{
       name: 'close',
       color:styleVariables.primeRed

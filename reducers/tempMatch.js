@@ -1,6 +1,10 @@
 const DEFAULT_STATE = {
     date : Date.now(),
-    duration:0,
+    duration:{
+        value:0,
+        isPaused:true,
+        lastUpdate:0
+    },
     teamA: {
         players:[],
         goals:[]

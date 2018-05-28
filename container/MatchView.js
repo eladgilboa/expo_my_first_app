@@ -4,7 +4,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import * as actions from '../actions';
-import {StyleSheet, View, Picker, ScrollView} from 'react-native';
+import {StyleSheet, View, Picker, ScrollView, AppState} from 'react-native';
 import {Icon, Avatar, ButtonGroup, Text, Card, Divider, Badge, Button, registerCustomIconType} from 'react-native-elements';
 import styleVariables from '../style/styleVariables';
 import ScoreBord       from '../components/ScoreBord';
@@ -42,49 +42,75 @@ class MatchView extends React.Component {
 
     constructor(props) {
         super(props);
+        const {value,isPaused,lastUpdate} = props.duration;
         this.state = {
             scoredTeam : false,
             choseScorer: false,
             choseAssist: false,
-            duration : props.duration,
-            isPaused : true,
+            duration : value,
+            isPaused,
+            lastUpdateDuration : lastUpdate,
         };
         this.goal = {
             scorer : null,
             assist : null,
         }
+        this.ignoreUpdateClock = false;
     }
 
-    componentWillUnmount(){
-        this.pauseClock()
+    componentDidMount() {
+        AppState.addEventListener('change', this.handleAppStateChange);
+        if(!this.state.isPaused){
+            this.startClock(this.state.lastUpdateDuration);
+        }
     }
 
-    startClock(){
-        this.lastUpdateDoration = Date.now();
-        this.interval = setInterval( this.updateDuration.bind(this),1000);
-        this.setState({isPaused:false})
+    componentWillUnmount() {
+        AppState.removeEventListener('change', this.handleAppStateChange);
+    }
+
+    handleAppStateChange = (nextAppState) => {
+        if (nextAppState.match(/inactive|background/)) {
+            console.log('App has come to the background!')
+            this.saveDuration();
+        }
+        //this.setState({appState: nextAppState});
+    }
+
+    startClock(lastUpdateDuration=null){
+        //this.lastUpdateDoration = Date.now();
+        this.setState({ isPaused : false, lastUpdateDuration : lastUpdateDuration || Date.now() }, () => {
+            this.interval = setInterval( this.updateDuration.bind(this),1000);
+        });
     }
 
     pauseClock(){
         clearInterval(this.interval);
-        this.saveDuration();
-        this.setState({isPaused:true})
+        this.setState({isPaused:true},()=>{
+            this.saveDuration();
+        })
     }
 
     updateDuration(){
-        //console.log(this.lastUpdateDoration);
+        if(this.ignoreUpdateClock){
+            return;
+        }
         const now = Date.now();
-        const addedTime = now - this.lastUpdateDoration;
-        this.lastUpdateDoration = now;
+        const addedTime = now - this.state.lastUpdateDuration;
+        const lastUpdateDuration = now;
         const duration = this.state.duration + addedTime;
-        this.setState({duration});
+        this.setState({duration,lastUpdateDuration});
     }
 
     saveDuration(){
         const { setTempMatchDuration, tempMatch } = this.props;
         //const newTempMatch = {...tempMatch };
         //newTempMatch.duration = this.state.duration;
-        const duration = this.state.duration;
+        const duration = {
+            value : this.state.duration,
+            isPaused : this.state.isPaused,
+            lastUpdate : this.state.lastUpdateDuration
+        };
         setTempMatchDuration(duration);
     }
     
@@ -112,6 +138,7 @@ class MatchView extends React.Component {
     }
 
     onGoalScored(team){
+        this.ignoreUpdateClock = true;
         this.setState({ scoredTeam : team, chose : 'scorer' })
     }
 
@@ -126,6 +153,8 @@ class MatchView extends React.Component {
     }
 
     saveGoal(){
+        this.ignoreUpdateClock = false;
+        this.updateDuration();
         const { setTempMatch, tempMatch } = this.props;
         const goal = {...this.goal};
         const newTempMatch = {...tempMatch };
@@ -152,15 +181,30 @@ class MatchView extends React.Component {
                 <BackgroundImage/>
                 {
                     !scoredTeam &&
-                    <View style={{flexDirection:'row',flex:1}}>
-                        <TypeButton type="error" title='Cancel Match' onPress={ this.clearMatch.bind(this) }/>
+                    <View style={style.actionContainer}>
+                        <TypeButton type="error" title='Cancel' onPress={ this.clearMatch.bind(this) }/>
                         {
                             isPaused ?
-                                <TypeButton title='Start' onPress={ this.startClock.bind(this) }/>
+                                <TypeButton
+                                    icon={{type:'entypo',name:'stopwatch'}}
+                                    //iconRight={{type:'entypo',name:'controller-play'}}
+                                    title='Start'
+                                    onPress={ this.startClock.bind(this) }
+                                />
                             :
-                                <TypeButton title='Pause' onPress={ this.pauseClock.bind(this) }/>
+                                <TypeButton
+                                    icon={{type:'entypo',name:'stopwatch'}}
+                                    //iconRight={{type:'entypo',name:'controller-paus'}}
+                                    title='Pause'
+                                    onPress={ this.pauseClock.bind(this) }
+                                />
                         }
-                        <TypeButton type="success" title='End Match' onPress={ this.endMatch.bind(this) }/>
+                        <TypeButton
+                            type="success"
+                            icon={{type:'custom',name:'whistle'}}
+                            title='End'
+                            onPress={ this.endMatch.bind(this) }
+                        />
                     </View>
                 }
                 {
@@ -189,7 +233,15 @@ class MatchView extends React.Component {
 
 
 
-const style = {}
+const style = {
+    actionContainer:{
+        flexDirection:'row',
+        flex:0,
+        paddingVertical:8,
+        backgroundColor:styleVariables.nivel2+'bb',
+        borderRadius:3,
+    }
+}
 
 const getPlayersFromCollection = (collection, playersId) => (
     collection.filter( ({id}) => (

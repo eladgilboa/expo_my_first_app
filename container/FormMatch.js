@@ -205,7 +205,7 @@ class FormMatch extends React.Component {
                     {this.pickPlayers()}
                     <TypeButton
                       containerViewStyle={{ marginVertical:3}}
-                      //large
+                      large
                       disabled={ isDisabled }
                       iconRight={ isDisabled ? {name: 'done',color:styleVariables.lineColor} : {name: 'done',color:styleVariables.primeBlue} }
                       title='Start Match'

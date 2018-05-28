@@ -9,23 +9,26 @@ class Clock extends React.Component {
   render(){
     const {date,duration} = this.props;
     const durationObject = moment.duration( duration );
-    
+
+    let minuts = Math.floor(durationObject.as('minutes'));
+    minuts = (minuts+'').length < 2 ? '0' + minuts : minuts;
+
+    let seconds = durationObject.get('seconds');
+    seconds = (seconds+'').length < 2 ? '0' + seconds : seconds;
+
     return (
         <View style={style.ClockContainer}>
           <View style={style.clockView}>
             <View style={style.time}>
               <View style={style.timeBox}>
-                <Text style={{color:styleVariables.primeYellow}}>{durationObject.get('hours')}</Text>
+                <Text style={style.timeText}>{minuts}</Text>
               </View>
               <View style={style.timeBox}>
-                <Text style={{color:styleVariables.primeYellow}}>{durationObject.get('minutes')}</Text>
-              </View>
-              <View style={style.timeBox}>
-                <Text style={{color:styleVariables.primeYellow}}>{durationObject.get('seconds')}</Text>
+                <Text style={style.timeText}>{seconds}</Text>
               </View>
             </View>
             <View style={style.date}>
-              <Text style={{color:styleVariables.primeYellow}}>{moment(date).format('ddd, DD.MM.YY HH:mm')}</Text>
+              <Text style={{color:styleVariables.primeYellow}}>{moment(date).format('ddd, DD.MM.YY')}</Text>
             </View>
           </View>
         </View>
@@ -40,16 +43,17 @@ const style = StyleSheet.create({
     flex:1,
     justifyContent:'flex-start',
     alignItems: 'center',
+    paddingVertical:8,
   },
   clockView:{
     //flex:-1,
     //flexBasis:0,
     //justifyContent:'center',
     //alignItems: 'center',
-    backgroundColor:styleVariables.nivel2+'88',
+    backgroundColor:styleVariables.nivel2+'bb',
     borderColor: styleVariables.lineColor,
     borderRadius:3,
-    padding:3
+    padding:8
   },
   date:{
     borderColor: styleVariables.lineColor,
@@ -60,7 +64,7 @@ const style = StyleSheet.create({
     marginTop: 3,
     //flexDirection:'row',
     //justifyContent:'center',
-    //alignItems: 'center',
+    alignItems: 'center',
   },
   time: {
     flex: 0,
@@ -74,12 +78,18 @@ const style = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderColor: styleVariables.lineColor,
-    backgroundColor: styleVariables.nivel1 + '88',
+    backgroundColor: styleVariables.nivel1,
     borderWidth: 1,
     borderRadius: 3,
     padding: 8,
     marginHorizontal: 1,
   },
+  timeText:{
+    color:styleVariables.primeBlue,
+    fontSize:42,
+    fontWeight:'100',
+    fontFamily:styleVariables.font_thin
+  }
 });
 
 export default Clock;

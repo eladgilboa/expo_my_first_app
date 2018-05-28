@@ -14,7 +14,11 @@ var initialState ={
     matches:[],
     tempMatch: {
         date : Date.now(),
-        duration:0,
+        duration:{
+            value:0,
+            isPaused:true,
+            lastUpdate:0
+        },
         teamA: {
             players:[],
             goals:[]
