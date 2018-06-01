@@ -14,7 +14,7 @@ function updateMatch(state,matchObj){
 }
 
 export default (state = DEFAULT_STATE, {type, matchObject, id} = {}) => {
-    console.log({type, matchObject, id});
+    //console.log({type, matchObject, id});
     switch (type) {
         case 'ADD_MATCH':
             return [ ...state, matchObject ];
