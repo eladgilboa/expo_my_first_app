@@ -83,7 +83,7 @@ class FormPlayer extends React.Component {
     }
 
     render() {
-        const { } = this.props;
+        
         const { validationMessage, player } = this.state;
         const defaultImg = require('../images/defaultPlayerAvatar.png');
         const idDisabled = !Boolean( player.name && !Object.values(validationMessage).find( Boolean ) );
@@ -108,9 +108,10 @@ class FormPlayer extends React.Component {
                         <FormLabel labelStyle={{color : styleVariables.primeBlue}}>Name</FormLabel>
                         <FormInput
                           underlineColorAndroid={styleVariables.primeBlue}
-                          inputStyle={{color:styleVariables.primeBlue,borderColor:styleVariables.primeBlue}}
+                          inputStyle={{color:styleVariables.primeBlue,textAlign:'left'}}
                           value={player.name}
                           onChangeText={this.onChange.bind(this,'name')}
+                          containerStyle={{}}
                         />
                         <FormValidationMessage>{validationMessage.name}</FormValidationMessage>
 
@@ -118,6 +119,7 @@ class FormPlayer extends React.Component {
                 </ScrollView>
                 <TypeButton
                   onPress={this.save.bind(this)}
+                  large
                   title="Create Player"
                   disabled={ idDisabled }
                   iconRight={ idDisabled ? {name: 'done', color:styleVariables.lineColor} : {name: 'done', color:styleVariables.primeBlue} }
@@ -129,7 +131,7 @@ class FormPlayer extends React.Component {
 
 const style = StyleSheet.create({
     cardContainer: {
-        backgroundColor: styleVariables.nivel2 + '99',
+        backgroundColor: styleVariables.nivel2 + 'aa',
         borderColor: styleVariables.lineColor,
         borderRadius: 3,
         paddingTop:8

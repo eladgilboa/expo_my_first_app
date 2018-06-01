@@ -29,9 +29,24 @@ export const deletePlayer = (player) => {
 };
 
 // Matches
-export const addMatch = (matchObject) => {
+export const addMatch = (tempMatchObject) => {
+    const matchObject = {...tempMatchObject,duration:tempMatchObject.duration.value};
     return {
         type: 'ADD_MATCH',
+        matchObject
+    }
+};
+
+export const deleteMatch = (id) => {
+    return {
+        type: 'DELETE_MATCH',
+        id
+    }
+};
+
+export const updateMatch = (matchObject) => {
+    return {
+        type: 'UPDATE_MATCH',
         matchObject
     }
 };

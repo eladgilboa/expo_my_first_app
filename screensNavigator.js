@@ -16,8 +16,8 @@ const stackOptions = {
   },
   navigationOptions: {
     headerStyle: {
-      backgroundColor : styleVariables.nivel2+'88',
-      borderColor: styleVariables.lineColor,
+      backgroundColor : styleVariables.nivel2,
+      //borderColor: styleVariables.lineColor,
       borderBottomWidth:1,
     },
     headerTintColor: styleVariables.primeYellow,

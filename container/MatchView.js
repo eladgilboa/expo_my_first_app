@@ -60,8 +60,8 @@ class MatchView extends React.Component {
 
     componentDidMount() {
         AppState.addEventListener('change', this.handleAppStateChange);
-        if(!this.state.isPaused){
-            this.startClock(this.state.lastUpdateDuration);
+        if(!this.state.isPaused ){
+           this.startClock();
         }
     }
 
@@ -77,9 +77,9 @@ class MatchView extends React.Component {
         //this.setState({appState: nextAppState});
     }
 
-    startClock(lastUpdateDuration=null){
-        //this.lastUpdateDoration = Date.now();
-        this.setState({ isPaused : false, lastUpdateDuration : lastUpdateDuration || Date.now() }, () => {
+    startClock(){
+        const lastUpdateDuration = this.props.duration.lastUpdate || Date.now();
+        this.setState({ isPaused : false, lastUpdateDuration }, () => {
             this.interval = setInterval( this.updateDuration.bind(this),1000);
         });
     }
@@ -115,7 +115,7 @@ class MatchView extends React.Component {
     }
     
     saveMatch(){
-        const match = {...this.props.tempMatch};
+        const match = {...this.props.tempMatch,duration:{value:this.state.duration}};
         this.props.addMatch(match);
     }
 
@@ -130,10 +130,9 @@ class MatchView extends React.Component {
     }
     
     clearTempMatch(){
-        this.pauseClock();
-        this.setState({duration:0});
+        this.setState({duration:0,lastUpdateDuration:0}, this.pauseClock);
         this.clearGoal();
-        this.props.clearTempMatch()
+        this.props.clearTempMatch();
         this.props.navigation.dispatch(resetAction);
     }
 
@@ -154,7 +153,7 @@ class MatchView extends React.Component {
 
     saveGoal(){
         this.ignoreUpdateClock = false;
-        this.updateDuration();
+        !this.state.isPaused && this.updateDuration();
         const { setTempMatch, tempMatch } = this.props;
         const goal = {...this.goal};
         const newTempMatch = {...tempMatch };
@@ -172,41 +171,21 @@ class MatchView extends React.Component {
         })
     }
 
+    onGoalDelete(team,goalIndex){
+        const { setTempMatch, tempMatch } = this.props;
+        const newTempMatch = {...tempMatch };
+
+        newTempMatch[team].goals.splice(goalIndex, 1);
+        setTempMatch(newTempMatch);
+    }
+
     render() {
         const { playersList, tempMatch } = this.props;
         const { scoredTeam, chose, duration, isPaused } = this.state;
 
         return (
-            <View style={{flex:1,padding:10, justifyContent:'flex-end'}}>
+            <View style={{flex:1,padding:10,paddingTop:0, justifyContent:'flex-end'}}>
                 <BackgroundImage/>
-                {
-                    !scoredTeam &&
-                    <View style={style.actionContainer}>
-                        <TypeButton type="error" title='Cancel' onPress={ this.clearMatch.bind(this) }/>
-                        {
-                            isPaused ?
-                                <TypeButton
-                                    icon={{type:'entypo',name:'stopwatch'}}
-                                    //iconRight={{type:'entypo',name:'controller-play'}}
-                                    title='Start'
-                                    onPress={ this.startClock.bind(this) }
-                                />
-                            :
-                                <TypeButton
-                                    icon={{type:'entypo',name:'stopwatch'}}
-                                    //iconRight={{type:'entypo',name:'controller-paus'}}
-                                    title='Pause'
-                                    onPress={ this.pauseClock.bind(this) }
-                                />
-                        }
-                        <TypeButton
-                            type="success"
-                            icon={{type:'custom',name:'whistle'}}
-                            title='End'
-                            onPress={ this.endMatch.bind(this) }
-                        />
-                    </View>
-                }
                 {
                     !scoredTeam &&
                     <Clock date={tempMatch.date} duration={duration} />
@@ -223,9 +202,45 @@ class MatchView extends React.Component {
                 }
                 {
                     !scoredTeam &&
-                    <GoalsBreakdown teamAGoals={tempMatch.teamA.goals} teamBGoals={tempMatch.teamB.goals} playersList={playersList}/>
+                    <GoalsBreakdown
+                        teamAGoals={tempMatch.teamA.goals}
+                        teamBGoals={tempMatch.teamB.goals}
+                        playersList={playersList}
+                        onGoalDelete={this.onGoalDelete.bind(this)}
+                    />
                 }
                 <ScoreBord score={{ teamA : tempMatch.teamA.goals.length, teamB : tempMatch.teamB.goals.length }} onGoalScored={this.onGoalScored.bind(this)}/>
+                {
+                    !scoredTeam &&
+                    <View style={style.actionContainer}>
+                        <TypeButton fontSize={12} icon={{type:'entypo',name:'trash'}} type="error" title='Delete' onPress={ this.clearMatch.bind(this) }/>
+                        {
+                            isPaused ?
+                                <TypeButton
+                                    fontSize={12}
+                                    icon={{type:'entypo',name:'stopwatch'}}
+                                    //iconRight={{type:'entypo',name:'controller-play'}}
+                                    title='Start'
+                                    onPress={ this.startClock.bind(this) }
+                                />
+                                :
+                                <TypeButton
+                                    fontSize={12}
+                                    icon={{type:'entypo',name:'stopwatch'}}
+                                    //iconRight={{type:'entypo',name:'controller-paus'}}
+                                    title='Pause'
+                                    onPress={ this.pauseClock.bind(this) }
+                                />
+                        }
+                        <TypeButton
+                            fontSize={12}
+                            type="success"
+                            icon={{type:'custom',name:'whistle'}}
+                            title='End'
+                            onPress={ this.endMatch.bind(this) }
+                        />
+                    </View>
+                }
             </View>
         );
     }
@@ -237,9 +252,12 @@ const style = {
     actionContainer:{
         flexDirection:'row',
         flex:0,
-        paddingVertical:8,
-        backgroundColor:styleVariables.nivel2+'bb',
+        justifyContent:'space-between',
+        //alignItems: 'stretch',
+        paddingVertical:3,
+        backgroundColor:styleVariables.nivel2+'aa',
         borderRadius:3,
+        marginTop:3,
     }
 }
 

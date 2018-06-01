@@ -52,7 +52,7 @@ class PlayersList extends React.Component {
 
 const style = {
     containerStyle : {
-        backgroundColor: styleVariables.nivel2+'88',
+        backgroundColor: styleVariables.nivel2+'aa',
     },
     subtitleStyle : {
         color : styleVariables.primeYellow,

@@ -16,7 +16,7 @@ const DEFAULT_STATE = {
 }
 
 export default (state = DEFAULT_STATE, {type, matchObject} = {}) => {
-    console.log(type);
+    console.log(type,matchObject);
     switch (type) {
         case 'CLEAR_TEMP_MATCH':
             return { ...DEFAULT_STATE, date : Date.now() };

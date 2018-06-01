@@ -46,6 +46,7 @@ const OnScoreEvent = ({ chose, playersList, onSave, onClear, onSelect }) => {
 const style = {
   container:{
     flex:1,
+    marginTop:3,
   },
   playersContainer : {
     flex:1,

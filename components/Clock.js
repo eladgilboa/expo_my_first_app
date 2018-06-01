@@ -23,6 +23,9 @@ class Clock extends React.Component {
               <View style={style.timeBox}>
                 <Text style={style.timeText}>{minuts}</Text>
               </View>
+              <View style={style.colonBox}>
+                <Text style={style.timeText}>:</Text>
+              </View>
               <View style={style.timeBox}>
                 <Text style={style.timeText}>{seconds}</Text>
               </View>
@@ -43,25 +46,28 @@ const style = StyleSheet.create({
     flex:1,
     justifyContent:'flex-start',
     alignItems: 'center',
-    paddingVertical:8,
+    //paddingVertical:3,
   },
   clockView:{
     //flex:-1,
     //flexBasis:0,
     //justifyContent:'center',
     //alignItems: 'center',
-    backgroundColor:styleVariables.nivel2+'bb',
+    backgroundColor:styleVariables.nivel2,
     borderColor: styleVariables.lineColor,
-    borderRadius:3,
-    padding:8
+    //borderRadius:3,
+    padding:3,
+    borderBottomLeftRadius:3,
+    borderBottomRightRadius:3,
+    paddingTop:0
   },
   date:{
-    borderColor: styleVariables.lineColor,
-    backgroundColor:styleVariables.nivel1+'88',
-    borderWidth: 1,
-    borderRadius: 3,
-    padding:3,
-    marginTop: 3,
+    //borderColor: styleVariables.lineColor,
+    //backgroundColor:styleVariables.nivel1+'88',
+    //borderWidth: 1,
+    //borderRadius: 3,
+    //padding:3,
+    //marginTop: 3,
     //flexDirection:'row',
     //justifyContent:'center',
     alignItems: 'center',
@@ -70,23 +76,28 @@ const style = StyleSheet.create({
     flex: 0,
     flexDirection: 'row',
     justifyContent: 'center',
-    paddingHorizontal: 8,
+    borderColor: styleVariables.lineColor,
+    backgroundColor: styleVariables.nivel1,
+    borderWidth: 1,
+    borderRadius: 3,
+    //paddingHorizontal: 8,
     //marginVertical:-8
+  },
+  colonBox:{
+    justifyContent: 'center',
+    //alignItems: 'center',
+    //paddingVertical: 8
   },
   timeBox: {
     flex: 0,
     justifyContent: 'center',
     alignItems: 'center',
-    borderColor: styleVariables.lineColor,
-    backgroundColor: styleVariables.nivel1,
-    borderWidth: 1,
-    borderRadius: 3,
-    padding: 8,
+    padding: 3,
     marginHorizontal: 1,
   },
   timeText:{
-    color:styleVariables.primeBlue,
-    fontSize:42,
+    color:styleVariables.primeYellow,
+    fontSize:62,
     fontWeight:'100',
     fontFamily:styleVariables.font_thin
   }

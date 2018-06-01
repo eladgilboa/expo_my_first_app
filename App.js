@@ -3,7 +3,7 @@ import { Font } from 'expo';
 import { Provider } from 'react-redux'
 import 'react-native-vector-icons';
 import createReduxStore from './store/createReduxStore'
-import { View, Dimensions, StyleSheet,AsyncStorage,Text } from 'react-native';
+import { View, Dimensions, StyleSheet,AsyncStorage,Text,ActivityIndicator } from 'react-native';
 
 import { persistStore } from 'redux-persist'
 import styleVariables from './style/styleVariables';
@@ -61,7 +61,11 @@ export default class App extends React.Component {
 
     render() {
         if(!this.state.fontLoaded){
-            return <Text>Loading...</Text>;
+            return (
+                <View style={{backgroundColor:styleVariables.darkblue,flex:1,justifyContent:'center',alignContent:'center'}}>
+                    <ActivityIndicator size="large" color={styleVariables.primeBlue} />
+                </View>
+            )
         }
         return (
             <Provider store={reduxStore}>

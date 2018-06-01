@@ -36,7 +36,7 @@ class FormMatch extends React.Component {
     constructor(props) {
         super(props);
         const {teamA,teamB} = props.tempMatch;
-        console.log('construct',props.tempMatch)
+        //console.log('construct',props.tempMatch)
 
         this.state = {
             freePlayers: this.getFreePlayers(props),
@@ -60,7 +60,7 @@ class FormMatch extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        console.log('new',nextProps.tempMatch);
+        //console.log('new :',nextProps.tempMatch);
         this.setState({
             freePlayers: this.getFreePlayers(nextProps),
             teamA:nextProps.tempMatch.teamA.players,
@@ -104,14 +104,14 @@ class FormMatch extends React.Component {
                     <Avatar
                         small
                         rounded
-                        icon={{name: 'clear', color:styleVariables.primeBlue}}
+                        icon={{name: 'clear', color:styleVariables.primeRed}}
                         onPress={ () => this.removeFromTeam( team, index ) }
                         activeOpacity={0.9}
                         containerStyle={{
                             marginRight:-20,zIndex:1,
                             backgroundColor: styleVariables.darkblue,
                             borderWidth:1,
-                            borderColor:styleVariables.primeBlue
+                            borderColor:styleVariables.primeRed
                         }}
                     />
                     <View style={{

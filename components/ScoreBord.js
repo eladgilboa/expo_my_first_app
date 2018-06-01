@@ -39,7 +39,7 @@ const ScoreBord = ({score, onGoalScored}) => {
                   size={12}
                   name='goal'
                   type='custom'
-                  color={styleVariables.primeYellow}
+                  color={styleVariables.primeBlue}
                   underlayColor={styleVariables.darkblue}
                   containerStyle={style.goalButton}
               />
@@ -61,7 +61,7 @@ const ScoreBord = ({score, onGoalScored}) => {
                 size={12}
                 name='goal'
                 type='custom'
-                color={styleVariables.primeYellow}
+                color={styleVariables.primeBlue}
                 underlayColor={styleVariables.darkblue}
                 containerStyle={style.goalButton}
               />
@@ -87,13 +87,12 @@ const style = StyleSheet.create({
     justifyContent:'space-between',
     backgroundColor:styleVariables.nivel2+'aa',
     borderRadius:3,
-    //opacity:0.8
   },
   goalButton:{
-    borderColor: styleVariables.lineColor,
-    backgroundColor: styleVariables.nivel2,
+    backgroundColor: styleVariables.darkblue,
     borderWidth: 1,
-    borderRadius: 3,
+    borderColor: styleVariables.primeBlue,
+    borderRadius: styleVariables.borderRadius,
     paddingVertical:1,
     marginTop: 3,
   },
